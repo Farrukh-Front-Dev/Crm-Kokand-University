@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiService, Vacancy } from '@/services/api';
+import { vacancyService, Vacancy } from '@/services/vacancyService';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -34,7 +34,7 @@ export default function Vacancies() {
 
   const { data: vacancies = [], isLoading } = useQuery({
     queryKey: ['vacancies'],
-    queryFn: () => apiService.getVacancies(),
+    queryFn: () => vacancyService.getVacancies(),
   });
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<VacancyFormData>({
@@ -42,7 +42,7 @@ export default function Vacancies() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data: VacancyFormData) => apiService.createVacancy(data as Omit<Vacancy, 'id'>),
+    mutationFn: (data: VacancyFormData) => vacancyService.createVacancy(data as Omit<Vacancy, 'id'>),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vacancies'] });
       toast({ title: 'Success', description: 'Vacancy created successfully' });
@@ -56,7 +56,7 @@ export default function Vacancies() {
 
   const updateMutation = useMutation({
     mutationFn: ({ id, data }: { id: number; data: Partial<VacancyFormData> }) =>
-      apiService.updateVacancy(id, data),
+      vacancyService.updateVacancy(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vacancies'] });
       toast({ title: 'Success', description: 'Vacancy updated successfully' });
@@ -70,7 +70,7 @@ export default function Vacancies() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => apiService.deleteVacancy(id),
+    mutationFn: (id: number) => vacancyService.deleteVacancy(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vacancies'] });
       toast({ title: 'Success', description: 'Vacancy deleted successfully' });

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiService, Subscription } from '@/services/api';
+import { subscriptionService, Subscription } from '@/services/subscriptionService';
+import { vacancyService } from '@/services/vacancyService';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -36,12 +37,12 @@ export default function Subscriptions() {
 
   const { data: subscriptions = [], isLoading } = useQuery({
     queryKey: ['subscriptions'],
-    queryFn: () => apiService.getSubscriptions(),
+    queryFn: () => subscriptionService.getSubscriptions(),
   });
 
   const { data: vacancies = [] } = useQuery({
     queryKey: ['vacancies'],
-    queryFn: () => apiService.getVacancies(),
+    queryFn: () => vacancyService.getVacancies(),
   });
 
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm<SubscriptionFormData>({
@@ -49,7 +50,7 @@ export default function Subscriptions() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (data: SubscriptionFormData) => apiService.createSubscription(data as Omit<Subscription, 'id'>),
+    mutationFn: (data: SubscriptionFormData) => subscriptionService.createSubscription(data as Omit<Subscription, 'id'>),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['subscriptions'] });
       toast({ title: 'Success', description: 'Application submitted successfully' });

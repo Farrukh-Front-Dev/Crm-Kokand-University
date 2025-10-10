@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { apiService } from '@/services/api';
+import { vacancyService } from '@/services/vacancyService';
+import { subscriptionService } from '@/services/subscriptionService';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Briefcase, Users, TrendingUp, Calendar } from 'lucide-react';
@@ -7,12 +8,12 @@ import { Briefcase, Users, TrendingUp, Calendar } from 'lucide-react';
 export default function Dashboard() {
   const { data: vacancies = [] } = useQuery({
     queryKey: ['vacancies'],
-    queryFn: () => apiService.getVacancies(),
+    queryFn: () => vacancyService.getVacancies(),
   });
 
   const { data: subscriptions = [] } = useQuery({
     queryKey: ['subscriptions'],
-    queryFn: () => apiService.getSubscriptions(),
+    queryFn: () => subscriptionService.getSubscriptions(),
   });
 
   const stats = [

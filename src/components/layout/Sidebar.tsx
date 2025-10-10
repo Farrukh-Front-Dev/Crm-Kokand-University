@@ -1,21 +1,31 @@
-import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Briefcase, Users, FileText } from 'lucide-react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Briefcase, Users, Shield, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/AuthContext';
+import { Button } from '@/components/ui/button';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Vacancies', href: '/vacancies', icon: Briefcase },
   { name: 'Subscriptions', href: '/subscriptions', icon: Users },
+  { name: 'Admins', href: '/admins', icon: Shield },
 ];
 
 export function Sidebar() {
   const location = useLocation();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r bg-card">
       <div className="flex h-full flex-col">
         <div className="flex h-16 items-center border-b px-6">
-          <FileText className="h-6 w-6 text-primary" />
+          <Shield className="h-6 w-6 text-primary" />
           <span className="ml-2 text-lg font-semibold">CRM System</span>
         </div>
         
@@ -39,6 +49,17 @@ export function Sidebar() {
             );
           })}
         </nav>
+        
+        <div className="border-t p-4">
+          <Button
+            variant="outline"
+            className="w-full justify-start"
+            onClick={handleLogout}
+          >
+            <LogOut className="mr-3 h-5 w-5" />
+            Logout
+          </Button>
+        </div>
       </div>
     </aside>
   );
