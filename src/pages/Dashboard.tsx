@@ -16,28 +16,31 @@ export default function Dashboard() {
     queryFn: () => subscriptionService.getSubscriptions(),
   });
 
+  const safeVacancies = Array.isArray(vacancies) ? vacancies : [];
+  const safeSubscriptions = Array.isArray(subscriptions) ? subscriptions : [];
+
   const stats = [
     {
       title: 'Total Vacancies',
-      value: vacancies.length,
+      value: safeVacancies.length,
       icon: Briefcase,
       trend: '+12%',
     },
     {
       title: 'Total Subscriptions',
-      value: subscriptions.length,
+      value: safeSubscriptions.length,
       icon: Users,
       trend: '+23%',
     },
     {
       title: 'Active Positions',
-      value: vacancies.length,
+      value: safeVacancies.length,
       icon: TrendingUp,
       trend: '+8%',
     },
     {
       title: 'This Month',
-      value: subscriptions.filter(s => {
+      value: safeSubscriptions.filter(s => {
         const date = new Date(s.created_at || '');
         const now = new Date();
         return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
@@ -81,7 +84,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {vacancies.slice(0, 5).map((vacancy) => (
+                {safeVacancies.slice(0, 5).map((vacancy) => (
                   <div key={vacancy.id} className="flex items-start justify-between border-b pb-4 last:border-0 last:pb-0">
                     <div>
                       <p className="font-medium">{vacancy.title}</p>
@@ -92,7 +95,7 @@ export default function Dashboard() {
                     </span>
                   </div>
                 ))}
-                {vacancies.length === 0 && (
+                {safeVacancies.length === 0 && (
                   <p className="text-sm text-muted-foreground text-center py-8">
                     No vacancies yet
                   </p>
@@ -107,7 +110,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {subscriptions.slice(0, 5).map((sub) => (
+                {safeSubscriptions.slice(0, 5).map((sub) => (
                   <div key={sub.id} className="flex items-start justify-between border-b pb-4 last:border-0 last:pb-0">
                     <div>
                       <p className="font-medium">{sub.fullName}</p>
@@ -118,7 +121,7 @@ export default function Dashboard() {
                     </span>
                   </div>
                 ))}
-                {subscriptions.length === 0 && (
+                {safeSubscriptions.length === 0 && (
                   <p className="text-sm text-muted-foreground text-center py-8">
                     No applications yet
                   </p>

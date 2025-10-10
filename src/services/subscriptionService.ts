@@ -16,16 +16,16 @@ export interface Subscription {
 export const subscriptionService = {
   async getSubscriptions(): Promise<Subscription[]> {
     const response = await axiosInstance.get('/subscriptions');
-    return response.data;
+    return Array.isArray(response.data) ? response.data : (response.data?.data || []);
   },
 
   async getDeletedSubscriptions(): Promise<Subscription[]> {
     const response = await axiosInstance.get('/subscriptions/deleted');
-    return response.data;
+    return Array.isArray(response.data) ? response.data : (response.data?.data || []);
   },
 
   async createSubscription(subscription: Omit<Subscription, 'id'>): Promise<Subscription> {
     const response = await axiosInstance.post('/subscriptions', subscription);
-    return response.data;
+    return response.data?.data || response.data;
   },
 };

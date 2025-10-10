@@ -9,16 +9,16 @@ export interface Admin {
 export const adminService = {
   async getAdmins(): Promise<Admin[]> {
     const response = await axiosInstance.get('/admins');
-    return response.data;
+    return Array.isArray(response.data) ? response.data : (response.data?.data || []);
   },
 
   async createAdmin(admin: Admin): Promise<Admin> {
     const response = await axiosInstance.post('/admins', admin);
-    return response.data;
+    return response.data?.data || response.data;
   },
 
   async updateAdmin(email: string, admin: Partial<Admin>): Promise<Admin> {
     const response = await axiosInstance.put(`/admins/${email}`, admin);
-    return response.data;
+    return response.data?.data || response.data;
   },
 };
