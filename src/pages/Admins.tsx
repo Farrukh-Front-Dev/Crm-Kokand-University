@@ -15,14 +15,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 const adminSchema = z.object({
-  email: z.string().email('Invalid email'),
-  name: z.string().min(1, 'Name is required').max(100),
+  email: z.string().email('Noto\'g\'ri email'),
+  name: z.string().min(1, 'Ism majburiy').max(100),
   password: z.string().optional(),
 }).refine((data) => {
   // Password is required when creating, optional when editing
   return true;
 }, {
-  message: "Password is required",
+  message: "Parol majburiy",
   path: ["password"],
 });
 
@@ -47,12 +47,12 @@ export default function Admins() {
     mutationFn: (data: Admin) => adminService.createAdmin(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admins'] });
-      toast({ title: 'Success', description: 'Admin created successfully' });
+      toast({ title: 'Muvaffaqiyatli', description: 'Admin muvaffaqiyatli yaratildi' });
       setIsDialogOpen(false);
       reset();
     },
     onError: () => {
-      toast({ title: 'Error', description: 'Failed to create admin', variant: 'destructive' });
+      toast({ title: 'Xato', description: 'Admin yaratishda xatolik yuz berdi', variant: 'destructive' });
     },
   });
 
@@ -61,13 +61,13 @@ export default function Admins() {
       adminService.updateAdmin(email, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admins'] });
-      toast({ title: 'Success', description: 'Admin updated successfully' });
+      toast({ title: 'Muvaffaqiyatli', description: 'Admin muvaffaqiyatli yangilandi' });
       setIsDialogOpen(false);
       setEditingAdmin(null);
       reset();
     },
     onError: () => {
-      toast({ title: 'Error', description: 'Failed to update admin', variant: 'destructive' });
+      toast({ title: 'Xato', description: 'Admin yangilashda xatolik yuz berdi', variant: 'destructive' });
     },
   });
 
@@ -80,7 +80,7 @@ export default function Admins() {
       updateMutation.mutate({ email: editingAdmin.email, data: updateData });
     } else {
       if (!data.password || data.password.length < 6) {
-        toast({ title: 'Error', description: 'Password must be at least 6 characters', variant: 'destructive' });
+        toast({ title: 'Xato', description: 'Parol kamida 6 ta belgidan iborat bo\'lishi kerak', variant: 'destructive' });
         return;
       }
       createMutation.mutate(data as Admin);
@@ -98,8 +98,8 @@ export default function Admins() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Admin Management</h1>
-            <p className="text-muted-foreground">Manage system administrators</p>
+            <h1 className="text-3xl font-bold tracking-tight">Adminlarni boshqarish</h1>
+            <p className="text-muted-foreground">Tizim administratorlarini boshqarish</p>
           </div>
           <Dialog
             open={isDialogOpen}
@@ -114,13 +114,13 @@ export default function Admins() {
             <DialogTrigger asChild>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                Add Admin
+                Admin qo'shish
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
                 <DialogTitle>
-                  {editingAdmin ? 'Edit Admin' : 'Create New Admin'}
+                  {editingAdmin ? 'Adminni tahrirlash' : 'Yangi admin yaratish'}
                 </DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -135,13 +135,13 @@ export default function Admins() {
                   {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="name">Name</Label>
+                  <Label htmlFor="name">Ism</Label>
                   <Input id="name" {...register('name')} />
                   {errors.name && <p className="text-sm text-destructive">{errors.name.message}</p>}
                 </div>
                 <div>
                   <Label htmlFor="password">
-                    {editingAdmin ? 'New Password (leave blank to keep current)' : 'Password'}
+                    {editingAdmin ? 'Yangi parol (joriyni saqlash uchun bo\'sh qoldiring)' : 'Parol'}
                   </Label>
                   <Input
                     id="password"
@@ -152,10 +152,10 @@ export default function Admins() {
                 </div>
                 <div className="flex justify-end gap-3">
                   <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                    Cancel
+                    Bekor qilish
                   </Button>
                   <Button type="submit">
-                    {editingAdmin ? 'Update' : 'Create'}
+                    {editingAdmin ? 'Yangilash' : 'Yaratish'}
                   </Button>
                 </div>
               </form>
@@ -165,18 +165,18 @@ export default function Admins() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Administrators ({admins.length})</CardTitle>
+            <CardTitle>Administratorlar ({admins.length})</CardTitle>
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="text-center py-8">Loading...</div>
+              <div className="text-center py-8">Yuklanmoqda...</div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
                     <TableHead>Email</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Actions</TableHead>
+                    <TableHead>Ism</TableHead>
+                    <TableHead>Amallar</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -200,7 +200,7 @@ export default function Admins() {
             )}
             {admins.length === 0 && !isLoading && (
               <div className="text-center py-8 text-muted-foreground">
-                No administrators found
+                Administratorlar topilmadi
               </div>
             )}
           </CardContent>

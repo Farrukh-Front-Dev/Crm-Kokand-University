@@ -17,13 +17,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 const subscriptionSchema = z.object({
-  fullName: z.string().min(1, 'Name is required').max(100),
-  age: z.string().min(1, 'Age is required'),
-  gender: z.string().min(1, 'Gender is required'),
-  resume_file: z.string().min(1, 'Resume file is required'),
-  phone: z.string().min(1, 'Phone is required'),
-  email: z.string().email('Invalid email'),
-  major: z.string().min(1, 'Major/Direction is required'),
+  fullName: z.string().min(1, 'Ism majburiy').max(100),
+  age: z.string().min(1, 'Yosh majburiy'),
+  gender: z.string().min(1, 'Jins majburiy'),
+  resume_file: z.string().min(1, 'Rezyume fayli majburiy'),
+  phone: z.string().min(1, 'Telefon majburiy'),
+  email: z.string().email('Noto\'g\'ri email'),
+  major: z.string().min(1, 'Mutaxassislik majburiy'),
 });
 
 type SubscriptionFormData = z.infer<typeof subscriptionSchema>;
@@ -51,12 +51,12 @@ export default function Subscriptions() {
     mutationFn: (data: SubscriptionFormData) => subscriptionService.createSubscription(data as Omit<Subscription, 'id'>),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['subscriptions'] });
-      toast({ title: 'Success', description: 'Application submitted successfully' });
+      toast({ title: 'Muvaffaqiyatli', description: 'Ariza muvaffaqiyatli yuborildi' });
       setIsDialogOpen(false);
       reset();
     },
     onError: () => {
-      toast({ title: 'Error', description: 'Failed to submit application', variant: 'destructive' });
+      toast({ title: 'Xato', description: 'Ariza yuborishda xatolik yuz berdi', variant: 'destructive' });
     },
   });
 
@@ -71,50 +71,50 @@ export default function Subscriptions() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Subscriptions</h1>
-            <p className="text-muted-foreground">Manage candidate applications</p>
+            <h1 className="text-3xl font-bold tracking-tight">Arizalar</h1>
+            <p className="text-muted-foreground">Nomzodlar arizalarini boshqarish</p>
           </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                Add Application
+                Ariza qo'shish
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>New Application</DialogTitle>
+                <DialogTitle>Yangi ariza</DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="fullName">Full Name</Label>
+                    <Label htmlFor="fullName">To'liq ism</Label>
                     <Input id="fullName" {...register('fullName')} />
                     {errors.fullName && <p className="text-sm text-destructive">{errors.fullName.message}</p>}
                   </div>
                   <div>
-                    <Label htmlFor="age">Age</Label>
+                    <Label htmlFor="age">Yosh</Label>
                     <Input id="age" {...register('age')} />
                     {errors.age && <p className="text-sm text-destructive">{errors.age.message}</p>}
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="gender">Gender</Label>
+                    <Label htmlFor="gender">Jins</Label>
                     <Select onValueChange={(value) => setValue('gender', value)}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select gender" />
+                        <SelectValue placeholder="Jinsni tanlang" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="male">Male</SelectItem>
-                        <SelectItem value="female">Female</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        <SelectItem value="male">Erkak</SelectItem>
+                        <SelectItem value="female">Ayol</SelectItem>
+                        <SelectItem value="other">Boshqa</SelectItem>
                       </SelectContent>
                     </Select>
                     {errors.gender && <p className="text-sm text-destructive">{errors.gender.message}</p>}
                   </div>
                   <div>
-                    <Label htmlFor="phone">Phone</Label>
+                    <Label htmlFor="phone">Telefon</Label>
                     <Input id="phone" {...register('phone')} />
                     {errors.phone && <p className="text-sm text-destructive">{errors.phone.message}</p>}
                   </div>
@@ -125,20 +125,20 @@ export default function Subscriptions() {
                   {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="major">Major/Direction</Label>
-                  <Input id="major" {...register('major')} placeholder="e.g., Frontend Developer" />
+                  <Label htmlFor="major">Mutaxassislik</Label>
+                  <Input id="major" {...register('major')} placeholder="masalan, Frontend Dasturchi" />
                   {errors.major && <p className="text-sm text-destructive">{errors.major.message}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="resume_file">Resume File URL</Label>
+                  <Label htmlFor="resume_file">Rezyume fayli URL</Label>
                   <Input id="resume_file" {...register('resume_file')} placeholder="https://..." />
                   {errors.resume_file && <p className="text-sm text-destructive">{errors.resume_file.message}</p>}
                 </div>
                 <div className="flex justify-end gap-3">
                   <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                    Cancel
+                    Bekor qilish
                   </Button>
-                  <Button type="submit">Submit</Button>
+                  <Button type="submit">Yuborish</Button>
                 </div>
               </form>
             </DialogContent>
@@ -148,21 +148,21 @@ export default function Subscriptions() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Applications ({filteredSubscriptions.length})</CardTitle>
+            <CardTitle>Arizalar ({filteredSubscriptions.length})</CardTitle>
           </CardHeader>
           <CardContent>
             {isLoading ? (
-              <div className="text-center py-8">Loading...</div>
+              <div className="text-center py-8">Yuklanmoqda...</div>
             ) : (
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Age</TableHead>
-                    <TableHead>Gender</TableHead>
-                    <TableHead>Contact</TableHead>
-                    <TableHead>Major</TableHead>
-                    <TableHead>Resume</TableHead>
+                    <TableHead>Ism</TableHead>
+                    <TableHead>Yosh</TableHead>
+                    <TableHead>Jins</TableHead>
+                    <TableHead>Aloqa</TableHead>
+                    <TableHead>Mutaxassislik</TableHead>
+                    <TableHead>Rezyume</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -200,7 +200,7 @@ export default function Subscriptions() {
             )}
             {filteredSubscriptions.length === 0 && !isLoading && (
               <div className="text-center py-8 text-muted-foreground">
-                No applications found
+                Hech qanday ariza topilmadi
               </div>
             )}
           </CardContent>

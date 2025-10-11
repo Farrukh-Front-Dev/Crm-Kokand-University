@@ -12,8 +12,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  email: z.string().email('Noto\'g\'ri email manzil'),
+  password: z.string().min(6, 'Parol kamida 6 ta belgidan iborat bo\'lishi kerak'),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -32,12 +32,12 @@ export default function Login() {
     setIsLoading(true);
     try {
       await login(data.email, data.password);
-      toast({ title: 'Success', description: 'Logged in successfully' });
+      toast({ title: 'Muvaffaqiyatli', description: 'Tizimga muvaffaqiyatli kirdingiz' });
       navigate('/');
     } catch (error) {
       toast({
-        title: 'Error',
-        description: 'Invalid email or password',
+        title: 'Xato',
+        description: 'Noto\'g\'ri email yoki parol',
         variant: 'destructive',
       });
     } finally {
@@ -52,9 +52,9 @@ export default function Login() {
           <div className="mx-auto h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
             <Lock className="h-6 w-6 text-primary" />
           </div>
-          <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
+          <CardTitle className="text-2xl font-bold">Admin kirish</CardTitle>
           <CardDescription>
-            Enter your credentials to access the CRM system
+            CRM tizimiga kirish uchun ma'lumotlaringizni kiriting
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -76,7 +76,7 @@ export default function Login() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Parol</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -95,10 +95,10 @@ export default function Login() {
               {isLoading ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Logging in...
+                  Kirish...
                 </>
               ) : (
-                'Login'
+                'Kirish'
               )}
             </Button>
           </form>

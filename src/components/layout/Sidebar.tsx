@@ -5,10 +5,10 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Vacancies', href: '/vacancies', icon: Briefcase },
-  { name: 'Subscriptions', href: '/subscriptions', icon: Users },
-  { name: 'Admins', href: '/admins', icon: Shield },
+  { name: 'Boshqaruv paneli', href: '/', icon: LayoutDashboard },
+  { name: 'Vakansiyalar', href: '/vacancies', icon: Briefcase },
+  { name: 'Arizalar', href: '/subscriptions', icon: Users },
+  { name: 'Adminlar', href: '/admins', icon: Shield },
 ];
 
 export function Sidebar() {
@@ -57,7 +57,7 @@ export function Sidebar() {
             onClick={handleLogout}
           >
             <LogOut className="mr-3 h-5 w-5" />
-            Logout
+            Chiqish
           </Button>
         </div>
       </div>

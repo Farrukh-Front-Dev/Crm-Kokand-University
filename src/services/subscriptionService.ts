@@ -16,10 +16,19 @@ export interface Subscription {
   deleted_at?: string | null;
 }
 
+const API_BASE_URL = 'https://univer-xrec.onrender.com';
+
 export const subscriptionService = {
   async getSubscriptions(): Promise<Subscription[]> {
     const response = await axiosInstance.get('/subscriptions');
-    return Array.isArray(response.data) ? response.data : (response.data?.data || []);
+    const data = Array.isArray(response.data) ? response.data : (response.data?.data || []);
+    // Convert relative resume_file paths to full URLs
+    return data.map(sub => ({
+      ...sub,
+      resume_file: sub.resume_file?.startsWith('http') 
+        ? sub.resume_file 
+        : `${API_BASE_URL}/${sub.resume_file}`
+    }));
   },
 
   async getDeletedSubscriptions(): Promise<Subscription[]> {

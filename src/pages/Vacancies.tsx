@@ -15,12 +15,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 const vacancySchema = z.object({
-  title: z.string().min(1, 'Title is required').max(200),
-  description: z.string().min(1, 'Description is required'),
-  location: z.string().min(1, 'Location is required'),
+  title: z.string().min(1, 'Sarlavha majburiy').max(200),
+  description: z.string().min(1, 'Tavsif majburiy'),
+  location: z.string().min(1, 'Joylashuv majburiy'),
   image: z.string().optional(),
-  experience: z.string().min(1, 'Experience is required'),
-  requirement: z.string().min(1, 'Requirements are required'),
+  experience: z.string().min(1, 'Tajriba majburiy'),
+  requirement: z.string().min(1, 'Talablar majburiy'),
 });
 
 type VacancyFormData = z.infer<typeof vacancySchema>;
@@ -45,12 +45,12 @@ export default function Vacancies() {
     mutationFn: (data: VacancyFormData) => vacancyService.createVacancy(data as Omit<Vacancy, 'id'>),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vacancies'] });
-      toast({ title: 'Success', description: 'Vacancy created successfully' });
+      toast({ title: 'Muvaffaqiyatli', description: 'Vakansiya muvaffaqiyatli yaratildi' });
       setIsDialogOpen(false);
       reset();
     },
     onError: () => {
-      toast({ title: 'Error', description: 'Failed to create vacancy', variant: 'destructive' });
+      toast({ title: 'Xato', description: 'Vakansiya yaratishda xatolik yuz berdi', variant: 'destructive' });
     },
   });
 
@@ -59,13 +59,13 @@ export default function Vacancies() {
       vacancyService.updateVacancy(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vacancies'] });
-      toast({ title: 'Success', description: 'Vacancy updated successfully' });
+      toast({ title: 'Muvaffaqiyatli', description: 'Vakansiya muvaffaqiyatli yangilandi' });
       setIsDialogOpen(false);
       setEditingVacancy(null);
       reset();
     },
     onError: () => {
-      toast({ title: 'Error', description: 'Failed to update vacancy', variant: 'destructive' });
+      toast({ title: 'Xato', description: 'Vakansiya yangilashda xatolik yuz berdi', variant: 'destructive' });
     },
   });
 
@@ -73,10 +73,10 @@ export default function Vacancies() {
     mutationFn: (id: string) => vacancyService.deleteVacancy(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vacancies'] });
-      toast({ title: 'Success', description: 'Vacancy deleted successfully' });
+      toast({ title: 'Muvaffaqiyatli', description: 'Vakansiya muvaffaqiyatli o\'chirildi' });
     },
     onError: () => {
-      toast({ title: 'Error', description: 'Failed to delete vacancy', variant: 'destructive' });
+      toast({ title: 'Xato', description: 'Vakansiya o\'chirishda xatolik yuz berdi', variant: 'destructive' });
     },
   });
 
@@ -95,7 +95,7 @@ export default function Vacancies() {
   };
 
   const handleDelete = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this vacancy?')) {
+    if (window.confirm('Ushbu vakansiyani o\'chirishga ishonchingiz komilmi?')) {
       deleteMutation.mutate(id);
     }
   };
@@ -110,8 +110,8 @@ export default function Vacancies() {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Vacancies</h1>
-            <p className="text-muted-foreground">Manage job openings</p>
+            <h1 className="text-3xl font-bold tracking-tight">Vakansiyalar</h1>
+            <p className="text-muted-foreground">Ish o'rinlarini boshqarish</p>
           </div>
           <Dialog open={isDialogOpen} onOpenChange={(open) => {
             setIsDialogOpen(open);
@@ -123,51 +123,51 @@ export default function Vacancies() {
             <DialogTrigger asChild>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
-                Add Vacancy
+                Vakansiya qo'shish
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>
-                  {editingVacancy ? 'Edit Vacancy' : 'Create New Vacancy'}
+                  {editingVacancy ? 'Vakansiyani tahrirlash' : 'Yangi vakansiya yaratish'}
                 </DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
-                  <Label htmlFor="title">Title</Label>
+                  <Label htmlFor="title">Sarlavha</Label>
                   <Input id="title" {...register('title')} />
                   {errors.title && <p className="text-sm text-destructive">{errors.title.message}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="location">Location</Label>
+                  <Label htmlFor="location">Joylashuv</Label>
                   <Input id="location" {...register('location')} />
                   {errors.location && <p className="text-sm text-destructive">{errors.location.message}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="experience">Experience</Label>
-                  <Input id="experience" {...register('experience')} placeholder="e.g., 2-3 years" />
+                  <Label htmlFor="experience">Tajriba</Label>
+                  <Input id="experience" {...register('experience')} placeholder="masalan, 2-3 yil" />
                   {errors.experience && <p className="text-sm text-destructive">{errors.experience.message}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="image">Image URL (optional)</Label>
+                  <Label htmlFor="image">Rasm URL (ixtiyoriy)</Label>
                   <Input id="image" {...register('image')} placeholder="https://..." />
                 </div>
                 <div>
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">Tavsif</Label>
                   <Textarea id="description" {...register('description')} rows={4} />
                   {errors.description && <p className="text-sm text-destructive">{errors.description.message}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="requirement">Requirements</Label>
+                  <Label htmlFor="requirement">Talablar</Label>
                   <Textarea id="requirement" {...register('requirement')} rows={4} />
                   {errors.requirement && <p className="text-sm text-destructive">{errors.requirement.message}</p>}
                 </div>
                 <div className="flex justify-end gap-3">
                   <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
-                    Cancel
+                    Bekor qilish
                   </Button>
                   <Button type="submit">
-                    {editingVacancy ? 'Update' : 'Create'}
+                    {editingVacancy ? 'Yangilash' : 'Yaratish'}
                   </Button>
                 </div>
               </form>
@@ -178,7 +178,7 @@ export default function Vacancies() {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search vacancies..."
+            placeholder="Vakansiyalarni qidirish..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10"
@@ -186,7 +186,7 @@ export default function Vacancies() {
         </div>
 
         {isLoading ? (
-          <div className="text-center py-12">Loading...</div>
+          <div className="text-center py-12">Yuklanmoqda...</div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredVacancies.map((vacancy) => (
@@ -241,7 +241,7 @@ export default function Vacancies() {
 
         {filteredVacancies.length === 0 && !isLoading && (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">No vacancies found</p>
+            <p className="text-muted-foreground">Vakansiyalar topilmadi</p>
           </div>
         )}
       </div>

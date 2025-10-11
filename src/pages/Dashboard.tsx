@@ -21,25 +21,25 @@ export default function Dashboard() {
 
   const stats = [
     {
-      title: 'Total Vacancies',
+      title: 'Jami vakansiyalar',
       value: safeVacancies.length,
       icon: Briefcase,
       trend: '+12%',
     },
     {
-      title: 'Total Subscriptions',
+      title: 'Jami arizalar',
       value: safeSubscriptions.length,
       icon: Users,
       trend: '+23%',
     },
     {
-      title: 'Active Positions',
+      title: 'Faol vakansiyalar',
       value: safeVacancies.length,
       icon: TrendingUp,
       trend: '+8%',
     },
     {
-      title: 'This Month',
+      title: 'Shu oy',
       value: safeSubscriptions.filter(s => {
         const date = new Date(s.created_at || '');
         const now = new Date();
@@ -54,8 +54,8 @@ export default function Dashboard() {
     <DashboardLayout>
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">Overview of your recruitment system</p>
+          <h1 className="text-3xl font-bold tracking-tight">Boshqaruv paneli</h1>
+          <p className="text-muted-foreground">Ishga qabul qilish tizimingizning umumiy ko'rinishi</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -70,7 +70,7 @@ export default function Dashboard() {
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
                 <p className="text-xs text-success">
-                  {stat.trend} from last month
+                  {stat.trend} o'tgan oydan
                 </p>
               </CardContent>
             </Card>
@@ -80,7 +80,7 @@ export default function Dashboard() {
         <div className="grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
-              <CardTitle>Recent Vacancies</CardTitle>
+              <CardTitle>So'nggi vakansiyalar</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -97,7 +97,7 @@ export default function Dashboard() {
                 ))}
                 {safeVacancies.length === 0 && (
                   <p className="text-sm text-muted-foreground text-center py-8">
-                    No vacancies yet
+                    Hali vakansiyalar yo'q
                   </p>
                 )}
               </div>
@@ -106,7 +106,7 @@ export default function Dashboard() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Recent Applications</CardTitle>
+              <CardTitle>So'nggi arizalar</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -117,13 +117,13 @@ export default function Dashboard() {
                       <p className="text-sm text-muted-foreground">{sub.major}</p>
                     </div>
                     <span className="text-xs text-muted-foreground">
-                      {sub.age} years
+                      {sub.age} yosh
                     </span>
                   </div>
                 ))}
                 {safeSubscriptions.length === 0 && (
                   <p className="text-sm text-muted-foreground text-center py-8">
-                    No applications yet
+                    Hali arizalar yo'q
                   </p>
                 )}
               </div>
