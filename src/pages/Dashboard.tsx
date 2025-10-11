@@ -114,7 +114,7 @@ export default function Dashboard() {
                   <div key={sub.id} className="flex items-start justify-between border-b pb-4 last:border-0 last:pb-0">
                     <div>
                       <p className="font-medium">{sub.fullName}</p>
-                      <p className="text-sm text-muted-foreground">{sub.yonalish}</p>
+                      <p className="text-sm text-muted-foreground">{sub.major}</p>
                     </div>
                     <span className="text-xs text-muted-foreground">
                       {sub.age} years

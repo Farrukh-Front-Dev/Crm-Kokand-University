@@ -1,16 +1,19 @@
 import axiosInstance from './axiosInstance';
 
 export interface Subscription {
-  id?: number;
+  id?: string;
   fullName: string;
-  age: number;
+  age: string;
   gender: string;
   resume_file: string;
   phone: string;
   email: string;
-  yonalish: string;
-  vacansy_id: number;
+  major: string;
+  is_active?: boolean;
+  is_deleted?: boolean;
   created_at?: string;
+  updated_at?: string;
+  deleted_at?: string | null;
 }
 
 export const subscriptionService = {

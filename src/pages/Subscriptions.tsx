@@ -11,27 +11,25 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Download, Filter, Mail, Phone } from 'lucide-react';
+import { Plus, Download, Mail, Phone } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 
 const subscriptionSchema = z.object({
   fullName: z.string().min(1, 'Name is required').max(100),
-  age: z.number().min(18, 'Age must be at least 18').max(100),
+  age: z.string().min(1, 'Age is required'),
   gender: z.string().min(1, 'Gender is required'),
   resume_file: z.string().min(1, 'Resume file is required'),
   phone: z.string().min(1, 'Phone is required'),
   email: z.string().email('Invalid email'),
-  yonalish: z.string().min(1, 'Direction is required'),
-  vacansy_id: z.number().min(1, 'Vacancy is required'),
+  major: z.string().min(1, 'Major/Direction is required'),
 });
 
 type SubscriptionFormData = z.infer<typeof subscriptionSchema>;
 
 export default function Subscriptions() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [filterVacancy, setFilterVacancy] = useState<string>('all');
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -66,9 +64,7 @@ export default function Subscriptions() {
     createMutation.mutate(data);
   };
 
-  const filteredSubscriptions = filterVacancy === 'all'
-    ? subscriptions
-    : subscriptions.filter(s => s.vacansy_id === parseInt(filterVacancy));
+  const filteredSubscriptions = subscriptions;
 
   return (
     <DashboardLayout>
@@ -98,7 +94,7 @@ export default function Subscriptions() {
                   </div>
                   <div>
                     <Label htmlFor="age">Age</Label>
-                    <Input id="age" type="number" {...register('age', { valueAsNumber: true })} />
+                    <Input id="age" {...register('age')} />
                     {errors.age && <p className="text-sm text-destructive">{errors.age.message}</p>}
                   </div>
                 </div>
@@ -129,25 +125,9 @@ export default function Subscriptions() {
                   {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
                 </div>
                 <div>
-                  <Label htmlFor="yonalish">Direction/Specialty</Label>
-                  <Input id="yonalish" {...register('yonalish')} />
-                  {errors.yonalish && <p className="text-sm text-destructive">{errors.yonalish.message}</p>}
-                </div>
-                <div>
-                  <Label htmlFor="vacansy_id">Vacancy</Label>
-                  <Select onValueChange={(value) => setValue('vacansy_id', parseInt(value))}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select vacancy" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {vacancies.map((v) => (
-                        <SelectItem key={v.id} value={v.id!.toString()}>
-                          {v.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {errors.vacansy_id && <p className="text-sm text-destructive">{errors.vacansy_id.message}</p>}
+                  <Label htmlFor="major">Major/Direction</Label>
+                  <Input id="major" {...register('major')} placeholder="e.g., Frontend Developer" />
+                  {errors.major && <p className="text-sm text-destructive">{errors.major.message}</p>}
                 </div>
                 <div>
                   <Label htmlFor="resume_file">Resume File URL</Label>
@@ -165,24 +145,6 @@ export default function Subscriptions() {
           </Dialog>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Filter className="h-4 w-4 text-muted-foreground" />
-            <Select value={filterVacancy} onValueChange={setFilterVacancy}>
-              <SelectTrigger className="w-[250px]">
-                <SelectValue placeholder="Filter by vacancy" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Vacancies</SelectItem>
-                {vacancies.map((v) => (
-                  <SelectItem key={v.id} value={v.id!.toString()}>
-                    {v.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
 
         <Card>
           <CardHeader>
@@ -199,45 +161,40 @@ export default function Subscriptions() {
                     <TableHead>Age</TableHead>
                     <TableHead>Gender</TableHead>
                     <TableHead>Contact</TableHead>
-                    <TableHead>Direction</TableHead>
-                    <TableHead>Vacancy</TableHead>
+                    <TableHead>Major</TableHead>
                     <TableHead>Resume</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredSubscriptions.map((sub) => {
-                    const vacancy = vacancies.find(v => v.id === sub.vacansy_id);
-                    return (
-                      <TableRow key={sub.id}>
-                        <TableCell className="font-medium">{sub.fullName}</TableCell>
-                        <TableCell>{sub.age}</TableCell>
-                        <TableCell className="capitalize">{sub.gender}</TableCell>
-                        <TableCell>
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-1 text-sm">
-                              <Mail className="h-3 w-3" />
-                              {sub.email}
-                            </div>
-                            <div className="flex items-center gap-1 text-sm">
-                              <Phone className="h-3 w-3" />
-                              {sub.phone}
-                            </div>
+                  {filteredSubscriptions.map((sub) => (
+                    <TableRow key={sub.id}>
+                      <TableCell className="font-medium">{sub.fullName}</TableCell>
+                      <TableCell>{sub.age}</TableCell>
+                      <TableCell className="capitalize">{sub.gender}</TableCell>
+                      <TableCell>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-1 text-sm">
+                            <Mail className="h-3 w-3" />
+                            {sub.email}
                           </div>
-                        </TableCell>
-                        <TableCell>{sub.yonalish}</TableCell>
-                        <TableCell>{vacancy?.title || 'N/A'}</TableCell>
-                        <TableCell>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => window.open(sub.resume_file, '_blank')}
-                          >
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
+                          <div className="flex items-center gap-1 text-sm">
+                            <Phone className="h-3 w-3" />
+                            {sub.phone}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>{sub.major}</TableCell>
+                      <TableCell>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => window.open(sub.resume_file, '_blank')}
+                        >
+                          <Download className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             )}

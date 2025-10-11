@@ -55,7 +55,7 @@ export default function Vacancies() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: Partial<VacancyFormData> }) =>
+    mutationFn: ({ id, data }: { id: string; data: Partial<VacancyFormData> }) =>
       vacancyService.updateVacancy(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vacancies'] });
@@ -70,7 +70,7 @@ export default function Vacancies() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => vacancyService.deleteVacancy(id),
+    mutationFn: (id: string) => vacancyService.deleteVacancy(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['vacancies'] });
       toast({ title: 'Success', description: 'Vacancy deleted successfully' });
@@ -94,7 +94,7 @@ export default function Vacancies() {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     if (window.confirm('Are you sure you want to delete this vacancy?')) {
       deleteMutation.mutate(id);
     }
