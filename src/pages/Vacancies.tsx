@@ -18,10 +18,11 @@ const vacancySchema = z.object({
   title: z.string().min(1, 'Sarlavha majburiy').max(200),
   description: z.string().min(1, 'Tavsif majburiy'),
   location: z.string().min(1, 'Joylashuv majburiy'),
-  image: z.string().optional(),
+  image: z.string().min(1, 'Rasm URL majburiy'),
   experience: z.string().min(1, 'Tajriba majburiy'),
   requirement: z.string().min(1, 'Talablar majburiy'),
 });
+
 
 type VacancyFormData = z.infer<typeof vacancySchema>;
 
@@ -193,11 +194,11 @@ export default function Vacancies() {
               <Card key={vacancy.id} className="hover:shadow-lg transition-shadow">
                 {vacancy.image && (
                   <div className="aspect-video w-full overflow-hidden rounded-t-lg">
-                    <img
+                    {/* <img
                       src={vacancy.image}
                       alt={vacancy.title}
                       className="h-full w-full object-cover"
-                    />
+                    /> */}
                   </div>
                 )}
                 <CardHeader>
