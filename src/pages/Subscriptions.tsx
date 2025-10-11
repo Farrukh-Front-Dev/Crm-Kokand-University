@@ -107,7 +107,7 @@ export default function Subscriptions() {
           </div>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button><Plus className="mr-2 h-4 w-4" /> Ariza qo‘shish</Button>
+              {/* <Button><Plus className="mr-2 h-4 w-4" /> Ariza qo‘shish</Button> */}
             </DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
               <DialogHeader>
