@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://univer-production.up.railway.app/api';
+const API_BASE_URL = 'https://univer-production.up.railway.app';
 
 export interface Vacancy {
   id?: number;

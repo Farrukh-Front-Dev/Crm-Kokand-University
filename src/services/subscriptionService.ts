@@ -16,7 +16,7 @@ export interface Subscription {
   deleted_at?: string | null;
 }
 
-const API_BASE_URL = 'https://univer-production.up.railway.app/api';
+const API_BASE_URL = 'https://univer-production.up.railway.app';
 
 export const subscriptionService = {
   async getSubscriptions(): Promise<Subscription[]> {
