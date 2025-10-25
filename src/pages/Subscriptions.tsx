@@ -37,9 +37,9 @@ const getResumeUrl = (path: string): string => {
   if (path.startsWith("http")) {
     const url = new URL(path);
     const fileName = url.pathname.split("/").pop();
-    return `https://univer-xrec.onrender.com/files/${fileName}`;
+    return `https://univer-production.up.railway.app/files/${fileName}`;
   }
-  return `https://univer-xrec.onrender.com/files/${path.replace(/^files\//, "")}`;
+  return `https://univer-production.up.railway.app/files/${path.replace(/^files\//, "")}`;
 };
 
 export default function Subscriptions() {

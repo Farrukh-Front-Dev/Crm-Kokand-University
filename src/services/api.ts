@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://univer-xrec.onrender.com/api';
+const API_BASE_URL = 'https://univer-production.up.railway.app/api';
 
 export interface Vacancy {
   id?: number;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://univer-xrec.onrender.com';
+const API_BASE_URL = 'https://univer-production.up.railway.app/api';
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,

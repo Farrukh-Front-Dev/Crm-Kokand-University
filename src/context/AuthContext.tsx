@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await axios.post('https://univer-xrec.onrender.com/auth/login/admin', {
+    const response = await axios.post('https://univer-production.up.railway.app/auth/login/admin', {
       email,
       password,
     });

@@ -16,13 +16,12 @@ export interface Subscription {
   deleted_at?: string | null;
 }
 
-const API_BASE_URL = 'https://univer-xrec.onrender.com';
+const API_BASE_URL = 'https://univer-production.up.railway.app/api';
 
 export const subscriptionService = {
   async getSubscriptions(): Promise<Subscription[]> {
     const response = await axiosInstance.get('/subscriptions');
     const data = Array.isArray(response.data) ? response.data : (response.data?.data || []);
-    // Convert relative resume_file paths to full URLs
     return data.map(sub => ({
       ...sub,
       resume_file: sub.resume_file?.startsWith('http') 
