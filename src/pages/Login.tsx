@@ -77,7 +77,7 @@ export default function Login() {
           className="flex items-center gap-1 shadow-sm hover:shadow-md transition-all"
         >
           <ExternalLink className="h-4 w-4" />
-          Panel
+          Super Admin Panel
         </Button>
       </a>
 
