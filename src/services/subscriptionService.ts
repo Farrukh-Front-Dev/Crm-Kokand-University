@@ -39,4 +39,14 @@ export const subscriptionService = {
     const response = await axiosInstance.post('/subscriptions', subscription);
     return response.data?.data || response.data;
   },
+
+  // ✅ Arizani o'chirish funksiyasi token bilan
+  async deleteSubscription(id: string, token: string): Promise<{ message: string }> {
+    const response = await axiosInstance.delete(`/subscriptions/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  },
 };

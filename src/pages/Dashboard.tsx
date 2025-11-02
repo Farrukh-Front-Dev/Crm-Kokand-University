@@ -1,83 +1,89 @@
-import { useQuery } from '@tanstack/react-query';
-import { vacancyService } from '@/services/vacancyService';
-import { subscriptionService } from '@/services/subscriptionService';
-import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Briefcase, Users, TrendingUp, Calendar } from 'lucide-react';
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
+import { vacancyService } from "@/services/vacancyService";
+import { subscriptionService } from "@/services/subscriptionService";
+import { DashboardLayout } from "@/components/layout/DashboardLayout";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Briefcase, Users, TrendingUp, Calendar } from "lucide-react";
 
 export default function Dashboard() {
   const { data: vacancies = [] } = useQuery({
-    queryKey: ['vacancies'],
-    queryFn: () => vacancyService.getVacancies(),
+    queryKey: ["vacancies"],
+    queryFn: vacancyService.getVacancies,
   });
 
   const { data: subscriptions = [] } = useQuery({
-    queryKey: ['subscriptions'],
-    queryFn: () => subscriptionService.getSubscriptions(),
+    queryKey: ["subscriptions"],
+    queryFn: subscriptionService.getSubscriptions,
   });
 
   const safeVacancies = Array.isArray(vacancies) ? vacancies : [];
   const safeSubscriptions = Array.isArray(subscriptions) ? subscriptions : [];
 
+  // Statistika
   const stats = [
     {
-      title: 'Jami vakansiyalar',
+      title: "Jami vakansiyalar",
       value: safeVacancies.length,
       icon: Briefcase,
-      trend: '+12%',
+      trend: "+12%",
     },
     {
-      title: 'Jami arizalar',
+      title: "Jami arizalar",
       value: safeSubscriptions.length,
       icon: Users,
-      trend: '+23%',
+      trend: "+23%",
     },
     {
-      title: 'Faol vakansiyalar',
-      value: safeVacancies.length,
+      title: "Faol vakansiyalar",
+      value: safeVacancies.filter(v => v.is_active).length,
       icon: TrendingUp,
-      trend: '+8%',
+      trend: "+8%",
     },
     {
-      title: 'Shu oy',
+      title: "Bu oy yuborilgan arizalar",
       value: safeSubscriptions.filter(s => {
-        const date = new Date(s.created_at || '');
+        if (!s.created_at) return false;
+        const date = new Date(s.created_at);
         const now = new Date();
         return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear();
       }).length,
       icon: Calendar,
-      trend: '+18%',
+      trend: "+18%",
     },
   ];
 
   return (
     <DashboardLayout>
       <div className="space-y-8">
+        {/* Header */}
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Boshqaruv paneli</h1>
-          <p className="text-muted-foreground">Ishga qabul qilish tizimingizning umumiy ko'rinishi</p>
+          <p className="text-muted-foreground">
+            Ishga qabul qilish tizimingizning umumiy ko'rinishi
+          </p>
         </div>
 
+        {/* Statistika */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
             <Card key={stat.title}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  {stat.title}
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
                 <stat.icon className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stat.value}</div>
-                <p className="text-xs text-success">
-                  {stat.trend} o'tgan oydan
-                </p>
+                <p className="text-xs text-success">{stat.trend} o'tgan oydan</p>
               </CardContent>
             </Card>
           ))}
         </div>
 
+        {/* So'nggi vakansiyalar va arizalar */}
         <div className="grid gap-6 md:grid-cols-2">
+          {/* So'nggi vakansiyalar */}
           <Card>
             <CardHeader>
               <CardTitle>So'nggi vakansiyalar</CardTitle>
@@ -85,14 +91,15 @@ export default function Dashboard() {
             <CardContent>
               <div className="space-y-4">
                 {safeVacancies.slice(0, 5).map((vacancy) => (
-                  <div key={vacancy.id} className="flex items-start justify-between border-b pb-4 last:border-0 last:pb-0">
+                  <div
+                    key={vacancy.id}
+                    className="flex flex-col md:flex-row items-start justify-between border-b pb-4 last:border-0 last:pb-0"
+                  >
                     <div>
                       <p className="font-medium">{vacancy.title}</p>
                       <p className="text-sm text-muted-foreground">{vacancy.location}</p>
+                      <p className="text-sm text-muted-foreground">{vacancy.experience}</p>
                     </div>
-                    <span className="text-xs text-muted-foreground">
-                      {vacancy.experience}
-                    </span>
                   </div>
                 ))}
                 {safeVacancies.length === 0 && (
@@ -104,6 +111,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
+          {/* So'nggi arizalar */}
           <Card>
             <CardHeader>
               <CardTitle>So'nggi arizalar</CardTitle>
@@ -111,13 +119,18 @@ export default function Dashboard() {
             <CardContent>
               <div className="space-y-4">
                 {safeSubscriptions.slice(0, 5).map((sub) => (
-                  <div key={sub.id} className="flex items-start justify-between border-b pb-4 last:border-0 last:pb-0">
+                  <div
+                    key={sub.id}
+                    className="flex flex-col md:flex-row items-start justify-between border-b pb-4 last:border-0 last:pb-0"
+                  >
                     <div>
                       <p className="font-medium">{sub.fullName}</p>
                       <p className="text-sm text-muted-foreground">{sub.major}</p>
+                      <p className="text-sm text-muted-foreground">{sub.phone}</p>
                     </div>
                     <span className="text-xs text-muted-foreground">
-                      {sub.age} yosh
+                      {/* {sub.age ? `${sub.age} yosh` : "-"} <br /> */}
+                      {sub.created_at ? new Date(sub.created_at).toLocaleDateString() : "-"}
                     </span>
                   </div>
                 ))}

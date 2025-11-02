@@ -8,7 +8,7 @@ const navigation = [
   { name: 'Boshqaruv paneli', href: '/', icon: LayoutDashboard },
   { name: 'Vakansiyalar', href: '/vacancies', icon: Briefcase },
   { name: 'Arizalar', href: '/subscriptions', icon: Users },
-  { name: 'Adminlar', href: '/admins', icon: Shield },
+  // { name: 'Adminlar', href: '/admins', icon: Shield },
 ];
 
 export function Sidebar() {

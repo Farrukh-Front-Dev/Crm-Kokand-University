@@ -112,10 +112,10 @@ export default function Admins() {
             }}
           >
             <DialogTrigger asChild>
-              <Button>
+              {/* <Button>
                 <Plus className="mr-2 h-4 w-4" />
                 Admin qo'shish
-              </Button>
+              </Button> */}
             </DialogTrigger>
             <DialogContent className="max-w-md">
               <DialogHeader>
