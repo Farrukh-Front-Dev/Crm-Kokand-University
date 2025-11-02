@@ -8,6 +8,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    historyApiFallback: true, // ✅ Refreshda 404 bo‘lmasligi uchun qo‘shildi
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
